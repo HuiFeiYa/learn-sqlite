@@ -1,15 +1,15 @@
-const Database = require('better-sqlite3');
-const db = new Database('foobar.db', { verbose: console.log });
-// const stmt = db.prepare('SELECT id, age FROM users');
-const insert = db.prepare(`INSERT INTO Persons (LastName,FirstName)
-VALUES (@LastName, @FirstName)`);
+const db = require('better-sqlite3')('shop.db', { verbose: console.log });
+const insertDataQuery = `
+  INSERT INTO users (username, email, birthdate) VALUES (?, ?, ?);
+`;
 
-const insertMany = db.transaction((cats) => {
-    for (const cat of cats) insert.run(cat);
-  });
-  
-  insertMany([
-    { LastName: 'Joey', FirstName: '2' },
-    { LastName: 'Sally', FirstName: '4' },
-    { LastName: 'Junior', FirstName: '1' },
-  ]);
+const insertDataStmt = db.prepare(insertDataQuery);
+
+const userData = {
+  username: 'john_doe',
+  email: 'john@example.com',
+  birthdate: '1990-05-15'
+};
+
+insertDataStmt.run(userData.username, userData.email, userData.birthdate);
+db.close(); // 关闭数据库连接
