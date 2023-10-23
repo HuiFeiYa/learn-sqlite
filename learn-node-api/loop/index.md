@@ -72,3 +72,15 @@ readFile // io 回调
 4. poll 阶段： 当文件读取操作完成后，I/O 线程将触发一个回调函数。主线程将该回调函数放入事件循环的下一个阶段（poll 阶段）中待执行。
     * 在 poll 阶段队列不为空，耗时超过 200ms
 5. 事件循环在 timers 阶段执行 setTimeout 回调
+
+
+## 问题
+setTimeout和 setImmediate 执行顺序不确定？
+```JS
+setTimeout(() => {
+    console.log('setTimeout');
+}, 0);
+setImmediate(() => {
+    console.log('setImmediate');
+})
+```
