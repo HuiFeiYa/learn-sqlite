@@ -1,5 +1,5 @@
 const fs = require("node:fs")
-const fsPromise = require("node:fs/promises")
+
 async function getFileHandle() {
   try {
     // 打开文件
