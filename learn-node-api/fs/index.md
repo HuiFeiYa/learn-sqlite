@@ -238,6 +238,19 @@ async function writeFileHandle() {
 
 # fsPromises
 
+## fs.promises.mkdir(destPath)
+如果 recursive 为 false，则使用 undefined 履行；如果 recursive 为 true，则使用创建的第一个目录路径履行。
+
+```js
+async function mkdir() {
+  const dir = await fs.promises.mkdir('learn-node-api/fs/customDir')
+  console.log(dir) // undefined
+
+  const dir = await fs.promises.mkdir('learn-node-api/fs/customDir/a/b', {recursive:true})
+  console.log(dir) // "D:\\resource\\learn-sqlite\\learn-node-api\\fs\\customDir\\a"
+
+}
+```
 ## fsPromises.open(path, flags[, mode])
 
 ```js
@@ -325,6 +338,97 @@ async function copyDir() {
 }
 ```
 
+## fsPromise.opendir(destPath)
+方法用于打开指定路径的目录，并返回一个 fs.Dir 对象。通过这个对象，可以遍历目录中的文件和子目录，并进行相关操作。
+```js
+async function readDir() {
+  try {
+    const dir = await fspromises.opendir('learn-node-api/fs');
+    console.log(`打开目录成功：${dir.path}`);
+
+    for await (const dirent of dir) {
+      console.log(dirent.name);
+    }
+    // 使用 dir.close() 方法关闭目录是为了确保在不再需要操作目录时释放相关资源.
+    await dir.close();
+    console.log('关闭目录成功');
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+```
+
+## fs.promises.readdir(path)
+
+```js
+const fs = require('fs').promises;
+
+async function readDir() {
+  try {
+    const files = await fs.readdir('/path/to/directory');
+    /**
+     * [
+        "customDir",
+        "index.js",
+        "index.md",
+        "output.txt",
+        "temp",
+        "temp.txt",
+        ]
+     */
+    for (const file of files) {
+      const filePath = '/path/to/directory/' + file;
+      const stats = await fs.stat(filePath);
+
+      if (stats.isFile()) {
+        console.log(`${file} 是一个文件`);
+      } else if (stats.isDirectory()) {
+        console.log(`${file} 是一个文件夹`);
+      }
+    }
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+readDir();
+
+```
+
+## fsPromises.readFile(path, {encoding: 'utf-8'})
+异步地读取文件的全部内容。
+
+如果未指定编码（使用 options.encoding），则数据作为 <Buffer> 对象返回。 否则，数据将为字符串。
+```js
+async function readFile1() {
+  const content = await fspromises.readFile('learn-node-api/fs/a.json');
+  const s = content.toString()
+  const v = JSON.parse(s)
+  console.log(v.a) // 1
+}
+```
+
+## fsPromises.rename(oldPath newPath)
+将 oldPath 重命名为 newPath。
+
+```js
+async function rename() {
+  await fs.promises.rename('learn-node-api/fs/a.json', 'learn-node-api/fs/a-new.json')
+}
+```
+
+## fsPromise.rm(path, {recursive: true})
+fsPromises.rm() 方法用于异步地删除指定路径的文件或目录。
+
+需要注意的是，fsPromises.rm() 方法在删除目录时必须指定 recursive 选项。如果省略该选项，将会抛出一个 Error。
+```js
+async function rmdir() {
+  await fspromises.rm('learn-node-api/fs/a-new.json', { recursive: true })
+}
+rmdir()
+```
 # 通用
 
 ## 文件系统标志

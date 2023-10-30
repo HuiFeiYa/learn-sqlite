@@ -1,5 +1,99 @@
 const fs = require("node:fs")
 
+const fspromises = require('fs').promises;
+const os = require('os');
+
+async function rmdir() {
+  await fspromises.rm('learn-node-api/fs/a-new.json', { recursive: true })
+}
+rmdir()
+
+async function rename() {
+  await fs.promises.rename('learn-node-api/fs/a.json', 'learn-node-api/fs/a-new.json')
+}
+// rename()
+async function readFile1() {
+  const content = await fspromises.readFile('learn-node-api/fs/a.json');
+  const s = content.toString()
+  const v = JSON.parse(s)
+  console.log(v.a)
+}
+// readFile1()
+
+async function readDir1() {
+  try {
+    const files = await fspromises.readdir('learn-node-api/fs');
+    console.log(`读取目录成功：${files}`);
+
+    for (const file of files) {
+      console.log(file);
+    }
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// readDir1();
+
+async function readDir() {
+  try {
+    const dir = await fspromises.opendir('learn-node-api/fs/temp');
+    console.log(`打开目录成功：${dir.path}`);
+
+    for await (const dirent of dir) {
+      console.log(dirent.name);
+    }
+    // 使用 dir.close() 方法关闭目录是为了确保在不再需要操作目录时释放相关资源
+    // await dir.close();
+    console.log('关闭目录成功');
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// readDir();
+
+
+async function createTempDir() {
+  try {
+    const tempDir = await fspromisespromises.mkdtemp(`${os.tmpdir()}/example-`);
+    console.log(`创建临时目录成功：${tempDir}`);
+
+    // 可以在新创建的目录中进行操作
+    // ...
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// createTempDir();
+
+
+async function mkdir() {
+  const dir = await fs.promises.mkdir('learn-node-api/fs/customDir/a/b', {recursive:true})
+  console.log(dir)
+}
+
+// mkdir()
+async function getFileStats() {
+  try {
+    const stats1 = await fs.promises.stat('learn-node-api/fs/temp.txt');
+    console.log('调用 stat() 返回的状态信息：', stats1);
+
+    const stats2 = await fs.promises.lstat('learn-node-api/fs/temp.txt');
+    console.log('调用 lstat() 返回的状态信息：', stats2);
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// getFileStats();
+
+
 async function getFileHandle() {
   try {
     // 打开文件
@@ -100,4 +194,3 @@ async function openDir() {
     console.log(dirent.name);
   }
 }
-openDir()
