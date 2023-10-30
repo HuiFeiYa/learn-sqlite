@@ -1,5 +1,5 @@
 const fs = require("node:fs")
-
+const fsPromise = require("node:fs/promises")
 async function getFileHandle() {
   try {
     // 打开文件
@@ -83,3 +83,21 @@ function writeFile() {
     writeStream.end()
 }
 // writeFile()
+
+
+async function readFile() {
+    const fileHandle = await fsPromise.open('learn-node-api/fs/temp.txt');
+    const buffer = Buffer.alloc(100)
+    const data = await fileHandle.read(buffer,0, buffer.length)
+    const {  bytesRead } = data
+    console.log(buffer.toString())
+}
+// readFile()
+
+async function openDir() {
+  const dir = await fsPromise.opendir('learn-node-api/fs/temp')
+  for await (const dirent of dir) {
+    console.log(dirent.name);
+  }
+}
+openDir()

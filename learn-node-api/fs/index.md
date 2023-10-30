@@ -20,6 +20,20 @@
 
 # api
 
+## fs.read
+```js
+async function readFile() {
+    // 打开 <FileHandle>。文件系统流
+    const fileHandle = await fsPromise.open('learn-node-api/fs/temp.txt');
+    // 手动管理，将填充读取的文件数据的缓冲区
+    const buffer = Buffer.alloc(100)
+    const data = await fileHandle.read(buffer,0, buffer.length)
+    const {  bytesRead } = data
+    console.log(buffer.toString())
+}
+readFile()
+```
+
 ## fs.createReadStream(path[, options])
 
 创建文件读取流。
@@ -78,3 +92,14 @@ function writeFile() {
     writeStream.end()
 }
 ```
+
+## filehandle.read() 和 fs.createReadStream() 区别
+使用场景：
+
+filehandle.read()：适用于对文件进行低级别的、手动控制的读取操作。它需要手动打开文件、读取数据、关闭文件，并且需要显式地管理缓冲区和读取位置。
+fs.createReadStream()：适用于高级别的、自动化的读取操作。它提供了一个可读流（Readable Stream），可以自动处理文件的打开、读取、关闭等操作，并且可以通过事件或流式操作来处理数据。
+
+缓冲区管理：
+
+filehandle.read()：需要手动创建和管理缓冲区，将数据读取到指定的缓冲区中。
+fs.createReadStream()：内部自动管理缓冲区，根据需要动态分配和释放缓冲区。
