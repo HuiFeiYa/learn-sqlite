@@ -3,10 +3,82 @@ const fs = require("node:fs")
 const fspromises = require('fs').promises;
 const os = require('os');
 
+
+
+async function createWriteSteam1() {
+  const writeStream = fs.createWriteStream('learn-node-api/fs/output.txt', {start:0})
+  console.log(writeStream)
+   /** 监听写入事件 */
+   writeStream.on('open', (err,data)=> {
+    console.log('open')
+})
+
+writeStream.on('ready', (err,data)=>{
+    console.log('ready')
+})
+writeStream.on('error', (err,data)=>{
+    console.log('error')
+})
+writeStream.on('finish', (err,data)=>{
+    console.log('finish')
+})
+
+/** 写入数据 */
+writeStream.write('hello fs\n')
+writeStream.write('这里是一段文字\n')
+writeStream.write('结束写入\n')
+
+writeStream.end()
+}
+
+// createWriteSteam1()
+
+async function createReadSteam1() {
+  const stream = fs.createReadStream('learn-node-api/fs/temp.txt', {start:0})
+  console.log(stream)
+  stream.on('data', chunk => {
+    console.log(`Received ${chunk.length} bytes of data. string: ${chunk.toString()}`);
+})
+  // 在这里可以进行对文件句柄的操作
+
+  stream.on('end', () => {
+      console.log('Finished reading the file.');
+  });
+}
+// createReadSteam1()
+
+async function writeFile2() {
+  const data = await fspromises.writeFile('learn-node-api/fs/output.txt', 'fspromises.writeFile content-xxxx', {
+    encoding: 'utf-8'
+  })
+  console.log('success')
+}
+// writeFile2()
+async function watch() {
+  fs.watch('learn-node-api/fs/temp.txt',{
+    persistent: true
+  }, (eventType, filename)=> {
+    console.log('change')
+  })
+}
+watch()
+
+// async function statfs() {
+//   const stats = await fspromises.statfs('learn-node-api/fs/index.md')
+//   console.log('stats',stats)
+// }
+// statfs()
+
+async function stat() {
+  const stats = await fspromises.stat('learn-node-api/fs/index.md')
+  console.log('stats',stats)
+}
+
+// stat()
 async function rmdir() {
   await fspromises.rm('learn-node-api/fs/a-new.json', { recursive: true })
 }
-rmdir()
+// rmdir()
 
 async function rename() {
   await fs.promises.rename('learn-node-api/fs/a.json', 'learn-node-api/fs/a-new.json')

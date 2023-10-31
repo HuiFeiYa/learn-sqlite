@@ -429,6 +429,76 @@ async function rmdir() {
 }
 rmdir()
 ```
+##  fspromises.writeFile
+异步地将数据写入文件，如果文件已经存在，则替换该文件。 data 可以是字符串、缓冲区、<AsyncIterable>、或 <Iterable> 对象。
+```js
+async function writeFile2() {
+  const data = await fspromises.writeFile('learn-node-api/fs/output.txt', 'fspromises.writeFile content-xxxx', {
+    encoding: 'utf-8'
+  })
+  console.log('success')
+}
+```
+# fs
+## fs.copyFile(src, dest)
+异步地将 src 复制到 dest。 默认情况下，如果 dest 已经存在，则会被覆盖。仅允许复制文件，如果想要复制文件夹，使用 fsPromise.cp 或 fs.cp
+```js
+import { copyFile, constants } from 'node:fs';
+
+function callback(err) {
+  if (err) throw err;
+  console.log('source.txt was copied to destination.txt');
+}
+
+// destination.txt will be created or overwritten by default.
+copyFile('source.txt', 'destination.txt', callback);
+```
+## fs.createReadStream
+用于创建可读流来读取文件的内容
+```js
+async function createReadSteam1() {
+  const stream = fs.createReadStream('learn-node-api/fs/temp.txt', {start:0})
+  console.log(stream)
+  stream.on('data', chunk => {
+    console.log(`Received ${chunk.length} bytes of data. string: ${chunk.toString()}`);
+})
+```
+
+## fs.createWriteStream
+```js
+// 创建写入流
+const writeStream = fs.createWriteStream('learn-node-api/fs/output.txt', {start:0})
+
+/** 设置监听 */
+writeStream.on('open', (err,data)=> {
+    console.log('open')
+})
+
+writeStream.on('ready', (err,data)=>{
+    console.log('ready')
+})
+writeStream.on('error', (err,data)=>{
+    console.log('error')
+})
+writeStream.on('finish', (err,data)=>{
+    console.log('finish')
+})
+/** 写入数据 */
+writeStream.write('hello fs\n')
+writeStream.write('这里是一段文字\n')
+```
+
+## fs.watch(path, {persistent: true},(eventType, filename)=> {} )
+用于监听指定文件或目录的变化。它接受一个文件路径作为参数，并返回一个 fs.FSWatcher 对象来进行监听。
+```js
+async function watch() {
+  fs.watch('learn-node-api/fs/temp.txt',{
+    persistent: true
+  }, (eventType, filename)=> {
+    console.log('change')
+  })
+}
+```
 # 通用
 
 ## 文件系统标志

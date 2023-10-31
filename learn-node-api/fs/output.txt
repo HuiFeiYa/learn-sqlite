@@ -1,2 +1,3 @@
-filehandle.writeFile(data, options) 方法用于向文件中写入数据，与 fs.writeFile() 方法类似。它接受一个字符串、Buffer 或 Uint8Array 类型的数据作为要写入的内容，并可以指定一些选项参数。该方法返回一个 Promise 对象，当写入完成时会解析为 undefined。
- append data 
+hello fs
+这里是一段文字
+结束写入
