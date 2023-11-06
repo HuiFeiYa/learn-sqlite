@@ -3,7 +3,19 @@ const fs = require("node:fs")
 const fspromises = require('fs').promises;
 const os = require('os');
 
+async function rmDir1() {
+  fs.rmdir('learn-node-api/fs/temp', {recursive: true},  err=> {
+    console.log(err)
+  })
+}
+rmDir1()
 
+async function unlink () {
+  fs.unlink('learn-node-api/fs/temp/a.txt', err=> {
+    console.log(err)
+  })
+}
+// unlink()
 
 async function createWriteSteam1() {
   const writeStream = fs.createWriteStream('learn-node-api/fs/output.txt', {start:0})
@@ -61,7 +73,7 @@ async function watch() {
     console.log('change')
   })
 }
-watch()
+// watch()
 
 // async function statfs() {
 //   const stats = await fspromises.statfs('learn-node-api/fs/index.md')

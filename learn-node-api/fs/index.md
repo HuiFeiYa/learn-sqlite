@@ -499,6 +499,31 @@ async function watch() {
   })
 }
 ```
+
+## fs.unlink
+异步地删除文件或符号链接。 除了可能的异常之外，没有为完成回调提供任何参数。
+
+
+```js
+async function unlink () {
+  fs.unlink('learn-node-api/fs/temp/a.txt', err=> {
+    console.log(err)
+  })
+}
+```
+## fs.rmdir()
+删除文件夹，可能出现错误情况
+* 删除非文件夹，而是文件
+* 删除文件夹非空，并且未使用 recursive option 选项
+
+```js
+async function rmDir1() {
+  fs.rmdir('learn-node-api/fs/temp', {recursive: true},  err=> {
+    console.log(err)
+  })
+}
+rmDir1()
+```
 # 通用
 
 ## 文件系统标志
